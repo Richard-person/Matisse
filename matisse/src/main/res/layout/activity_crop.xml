@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhihu.matisse.crop.CropImageView
+        android:id="@+id/crop_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"/>
+
+    <LinearLayout
+        android:id="@+id/done_cancel_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#363636"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:padding="16dp"
+            android:text="@string/button_back"
+            android:textColor="#ffffff"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_crop_progress"
+            android:text="共1张/第1张"
+            android:textSize="13sp"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="16dp"
+            android:text="@string/button_sure_default"
+            android:textColor="#ffffff"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
