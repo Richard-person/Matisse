@@ -101,7 +101,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
                                                 }
                                             })
-                                            .originalEnable(true)
+                                            .originalEnable(false)
                                             .maxOriginalSize(10)
                                             .autoHideToolbarOnSingleTap(true)
                                             .setOnCheckedListener(new OnCheckedListener() {

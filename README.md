@@ -15,6 +15,10 @@ Matisse is a well-designed local image and video selector for Android. You can
 |:------------------------------:|:---------------------------------:|:--------------------------------:|
 |![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
 
+| 裁剪1                           | 裁剪2                              | 裁剪3                            |
+|:------------------------------:|:---------------------------------:|:--------------------------------:|
+|![](image/crop1.png) | ![](image/crop2.png) | ![](image/crop3.png)|
+
 ## Download
 Gradle:
 
