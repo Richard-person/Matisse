@@ -1,11 +1,9 @@
 ![Image](/image/banner.png)
 
-#描述
+# 描述
 基于知乎原Matisse项目， 添加图片批量裁剪，图片批量压缩，支持选择(单选或者多选)图片后裁剪并且压缩，支持自由裁剪，按比例裁剪，并优化图片选择之后的最终结果返回数据封装。
 
 # Matisse
-[![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse) [ ![Download](https://api.bintray.com/packages/zhihu/maven/matisse/images/download.svg) ](https://bintray.com/zhihu/maven/matisse/_latestVersion)
-
 Matisse is a well-designed local image and video selector for Android. You can
 - Use it in Activity or Fragment
 - Select images including JPEG, PNG, GIF and videos including MPEG, MP4
@@ -31,11 +29,11 @@ repositories {
 }
 
 dependencies {
-    compile 'com.zhihu.android:matisse:$latest_version'
+    implementation 'com.github.Richard-person:Matisse:1.0'
 }
 ```
 
-Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
+Check out [Matisse releases](https://github.com/Richard-person/Matisse/releases) to see more unstable versions.
 
 ## ProGuard
 If you use [Glide](https://github.com/bumptech/glide) as your image engine, add rules as Glide's README says.
@@ -86,7 +84,7 @@ Matisse.from(SampleActivity.this)
                                 .forResult(REQUEST_CODE_CHOOSE);
 ```
 
-#
+####
 注意:
     cropAspect() 和cropOutPutMaxWidth()、cropOutPutMaxHeight()只能使用其一，默认使用cropOutPutMaxWidth()、cropOutPutMaxHeight()，当使用cropOutPutMaxWidth()、cropOutPutMaxHeight()时，为自由裁剪。
 
