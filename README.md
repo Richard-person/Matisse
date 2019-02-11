@@ -24,9 +24,12 @@ Matisse is a well-designed local image and video selector for Android. You can
 Gradle:
 
 ```groovy
-repositories {
-    jcenter()
-}
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 
 dependencies {
     implementation 'com.github.Richard-person:Matisse:1.0'
@@ -84,8 +87,7 @@ Matisse.from(SampleActivity.this)
                                 .forResult(REQUEST_CODE_CHOOSE);
 ```
 
-####
-注意:
+#### 注意:
     cropAspect() 和cropOutPutMaxWidth()、cropOutPutMaxHeight()只能使用其一，默认使用cropOutPutMaxWidth()、cropOutPutMaxHeight()，当使用cropOutPutMaxWidth()、cropOutPutMaxHeight()时，为自由裁剪。
 
 
