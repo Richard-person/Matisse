@@ -1,79 +1,129 @@
-# TabBar-master
-基于知乎原Matisse项目， 添加图片批量裁剪，图片批量压缩，支持选择(单选或者多选)图片后裁剪并且压缩
+![Image](/image/banner.png)
 
-截图
--------
-![](https://github.com/Richard-person/TabBar-master/blob/master/screenshot/example1.png)
+# Matisse
+[![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse) [ ![Download](https://api.bintray.com/packages/zhihu/maven/matisse/images/download.svg) ](https://bintray.com/zhihu/maven/matisse/_latestVersion)
 
-使用方法
--------
-1.导入<br>
- Step 1. Add it in your root build.gradle at the end of repositories:
+Matisse is a well-designed local image and video selector for Android. You can
+- Use it in Activity or Fragment
+- Select images including JPEG, PNG, GIF and videos including MPEG, MP4
+- Apply different themes, including two built-in themes and custom themes
+- Different image loaders
+- Define custom filter rules
+- More to find out yourself
 
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
-Step 2. Add the dependency
+| Zhihu Style                    | Dracula Style                     | Preview                          |
+|:------------------------------:|:---------------------------------:|:--------------------------------:|
+|![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
 
-	dependencies {
-	        implementation 'com.github.Richard-person:TabBar-master:v1.2.5'
-	}
+## Download
+Gradle:
 
-2.XML<br>
+```groovy
+repositories {
+    jcenter()
+}
 
-<com.richard.tabbar.TabBarView<br>
-&emsp;&emsp;android:id="@+id/tbv_one"<br>
-&emsp;&emsp;android:layout_width="wrap_content"<br>
-&emsp;&emsp;android:layout_height="@dimen/tabbar_height"<br>
-&emsp;&emsp;android:layout_marginTop="@dimen/content_margin"<br>
-&emsp;&emsp;app:tbv_blank_view_color="#afafaf"<br>
-&emsp;&emsp;app:tbv_blank_view_width="0.5dp"<br>
-&emsp;&emsp;app:tbv_content_back_color="#0988a6"<br>
-&emsp;&emsp;app:tbv_default_checked_item_position="0"<br>
-&emsp;&emsp;app:tbv_item_checked_back_color="#034a58"<br>
-&emsp;&emsp;app:tbv_item_uncheck_back_color="#00000000"<br>
-&emsp;&emsp;app:tbv_padding_left_right="20dp"<br>
-&emsp;&emsp;app:tbv_radius="@dimen/tabbar_radius"<br>
-&emsp;&emsp;app:tbv_text_checked_color="#ffffff"<br>
-&emsp;&emsp;app:tbv_text_size="@dimen/tabbar_textSize"<br>
-&emsp;&emsp;app:tbv_text_uncheck_color="#ffffff"<br>
-&emsp;&emsp;app:tbv_texts="推荐|首页|科技|热点|情感"<br>
-&emsp;&emsp;/>
+dependencies {
+    compile 'com.zhihu.android:matisse:$latest_version'
+}
+```
 
-3.java 代码<br>
+Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
 
-      tbv_one = findViewById(R.id.tbv_one);
-      tbv_one.setOnTabBarCheckedChangeListener(new TabBarView.OnTabBarCheckedChangeListener() {
-            @Override
-            public void checked(String itemText, int position) {
-                Toast.makeText(getApplicationContext(),"已选择了 " + itemText + "   位置 : " + position,Toast.LENGTH_LONG).show();
-            }
-      });
-      //tbv_one.setData(Arrays.asList("推荐","首页","科技","热点","情感"));//动态设置子选项文本数据
-      //tbv_one.checkItem(0);//动态设置默认选中子选项
+## ProGuard
+If you use [Glide](https://github.com/bumptech/glide) as your image engine, add rules as Glide's README says.
+And add extra rule:
+```pro
+-dontwarn com.squareup.picasso.**
+```
 
-控件属性介绍
--------
-* tbv_texts 子选项文本值，多个以竖线“|”分隔
-* tbv_text_size 子选项文本大小
-* tbv_text_uncheck_color  未选中状态下的子选项文本颜色
-* tbv_text_checked_color  选中状态下的子选项文本颜色
-* tbv_radius  同时设置四个圆角弧度
-* tbv_topLeftRadius  设置左上角圆角弧度
-* tbv_topRightRadius  设置右上角圆角弧度
-* tbv_bottomLeftRadius  设置左下角圆角弧度
-* tbv_bottomRightRadius  设置右下角圆角弧度
-* tbv_content_back_color  整体背景颜色
-* tbv_item_uncheck_back_color 未选中状态下的子选项背景颜色
-* tbv_item_checked_back_color 选中状态下的子选项背景颜色
-* tbv_blank_view_width  分隔线宽度
-* tbv_blank_view_color  分隔线颜色
-* tbv_width_isAverage 子选项是否均分总宽度
-* tbv_padding_left_right  子选项左右方向内部边距
-* tbv_default_checked_item_position 默认选中子选项位置
-* tbv_is_bottom_bar_style 设置选中时的状态底部是否为条状样式
-* tbv_whenBottomBarStyleHeight 设置当tbv_is_bottom_bar_style=true时的bottomBar的高度
-* tbv_isApplyContentRadius 是否将弧度值应用到总TabBarView
+If you use [Picasso](https://github.com/square/picasso) as your image engine, add rules as Picasso's README says.
+And add extra rule:
+```pro
+-dontwarn com.bumptech.glide.**
+```
+**Attention**: The above progurad rules are correct.
+
+## How do I use Matisse?
+#### Permission
+The library requires two permissions:
+- `android.permission.READ_EXTERNAL_STORAGE`
+- `android.permission.WRITE_EXTERNAL_STORAGE`
+
+So if you are targeting Android 6.0+, you need to handle runtime permission request before next step.
+
+#### Simple usage snippet
+------
+Start `MatisseActivity` from current `Activity` or `Fragment`:
+
+```java
+Matisse.from(MainActivity.this)
+        .choose(MimeType.allOf())
+        .countable(true)
+        .maxSelectable(9)
+        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+        .thumbnailScale(0.85f)
+        .imageEngine(new GlideEngine())
+        .forResult(REQUEST_CODE_CHOOSE);
+```
+
+#### Themes
+There are two built-in themes you can use to start `MatisseActivity`:
+- `R.style.Matisse_Zhihu` (light mode)
+- `R.style.Matisse_Dracula` (dark mode)
+
+And Also you can define your own theme as you wish.
+
+#### Receive Result
+In `onActivityResult()` callback of the starting `Activity` or `Fragment`:
+
+```java
+List<Uri> mSelected;
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+        mSelected = Matisse.obtainResult(data);
+        Log.d("Matisse", "mSelected: " + mSelected);
+    }
+}
+```
+
+#### For Glide V4
+
+To be honest,the library can't supply GlideEngine for Glide both v3 and v4 at the same time. (Anyone who
+ have good idea to achieve this. PR is welcomed)
+
+GlideEngine with Glide v3 is default.
+
+So if your project's glide version is 4.0+ ,then you must realize GlideEngine by yourself. More details
+could refer with [Glide4Engine](https://github.com/zhihu/Matisse/blob/master/sample/src/main/java/com/zhihu/matisse/sample/Glide4Engine.java) in the sample.
+
+#### More
+Find more details about Matisse in [wiki](https://github.com/zhihu/Matisse/wiki).
+
+## Contributing
+[Matisse is an Open Source Project](https://github.com/zhihu/Matisse/blob/master/CONTRIBUTING.md)
+
+## Thanks
+This library is inspired by [Laevatein](https://github.com/nohana/Laevatein) and uses some of its source code.
+
+## License
+
+    Copyright 2017 Zhihu Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
