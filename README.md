@@ -1,5 +1,8 @@
 ![Image](/image/banner.png)
 
+#描述
+基于知乎原Matisse项目， 添加图片批量裁剪，图片批量压缩，支持选择(单选或者多选)图片后裁剪并且压缩，支持自由裁剪，按比例裁剪，并优化图片选择之后的最终结果返回数据封装。
+
 # Matisse
 [![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse) [ ![Download](https://api.bintray.com/packages/zhihu/maven/matisse/images/download.svg) ](https://bintray.com/zhihu/maven/matisse/_latestVersion)
 
@@ -61,17 +64,32 @@ So if you are targeting Android 6.0+, you need to handle runtime permission requ
 Start `MatisseActivity` from current `Activity` or `Fragment`:
 
 ```java
-Matisse.from(MainActivity.this)
-        .choose(MimeType.allOf())
-        .countable(true)
-        .maxSelectable(9)
-        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-        .thumbnailScale(0.85f)
-        .imageEngine(new GlideEngine())
-        .forResult(REQUEST_CODE_CHOOSE);
+Matisse.from(SampleActivity.this)
+                                .choose(MimeType.ofAll())
+                                .theme(R.style.Matisse_Dracula)
+                                .autoHideToolbarOnSingleTap(true)
+                                .countable(false)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.provider", "test"))
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .maxSelectable(8)
+                                .originalEnable(false)
+                                .maxOriginalSize(10)
+                                .imageEngine(new Glide4Engine())
+                                .compress(true)                 //是否开启压缩（只支持图片）
+                                .compressSize(100)              //超过多少KB才压缩图片
+                                .showCompressProgress(true)     //是否开启图片压缩等待提示
+                                .isCrop(true)                   //是否开启裁剪
+                                .cropOutPutMaxWidth(800)        //裁剪输出最大宽度，单位：px
+                                .cropOutPutMaxHeight(800)       //裁剪输出最大高度，单位：px
+//                                .cropAspect(1,1)              //裁剪比例
+                                .forResult(REQUEST_CODE_CHOOSE);
 ```
+
+#
+注意:
+    cropAspect() 和cropOutPutMaxWidth()、cropOutPutMaxHeight()只能使用其一，默认使用cropOutPutMaxWidth()、cropOutPutMaxHeight()，当使用cropOutPutMaxWidth()、cropOutPutMaxHeight()时，为自由裁剪。
+
 
 #### Themes
 There are two built-in themes you can use to start `MatisseActivity`:
@@ -84,7 +102,7 @@ And Also you can define your own theme as you wish.
 In `onActivityResult()` callback of the starting `Activity` or `Fragment`:
 
 ```java
-List<Uri> mSelected;
+List<SelectedResult> mSelected;
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,29 +123,4 @@ GlideEngine with Glide v3 is default.
 
 So if your project's glide version is 4.0+ ,then you must realize GlideEngine by yourself. More details
 could refer with [Glide4Engine](https://github.com/zhihu/Matisse/blob/master/sample/src/main/java/com/zhihu/matisse/sample/Glide4Engine.java) in the sample.
-
-#### More
-Find more details about Matisse in [wiki](https://github.com/zhihu/Matisse/wiki).
-
-## Contributing
-[Matisse is an Open Source Project](https://github.com/zhihu/Matisse/blob/master/CONTRIBUTING.md)
-
-## Thanks
-This library is inspired by [Laevatein](https://github.com/nohana/Laevatein) and uses some of its source code.
-
-## License
-
-    Copyright 2017 Zhihu Inc.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
 
