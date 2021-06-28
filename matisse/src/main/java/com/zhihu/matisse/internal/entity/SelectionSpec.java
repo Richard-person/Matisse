@@ -68,6 +68,9 @@ public final class SelectionSpec {
     public int cropAspectX;//裁剪横向比例
     public int cropAspectY;//裁剪竖向比例
 
+    //其它
+    public boolean isOnlyCapture;//是否仅拍照获取
+
 
     private SelectionSpec() {
     }
@@ -94,6 +97,7 @@ public final class SelectionSpec {
         maxVideoSelectable = 0;
         filters = null;
         capture = false;
+        isOnlyCapture = false;
         captureStrategy = null;
         spanCount = 3;
         gridExpectedSize = 0;

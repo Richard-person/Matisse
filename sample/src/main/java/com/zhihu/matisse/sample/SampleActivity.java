@@ -132,6 +132,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                                             .isCrop(true)
                                             .cropOutPutMaxWidth(800)
                                             .cropOutPutMaxHeight(800)
+                                            .setOnlyCapture(true)
 //                                            .cropAspect(1,1)
                                             .forResult(REQUEST_CODE_CHOOSE);
                                     break;

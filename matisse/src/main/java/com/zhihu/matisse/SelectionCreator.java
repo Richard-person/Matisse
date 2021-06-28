@@ -417,4 +417,13 @@ public final class SelectionCreator {
         mSelectionSpec.cropAspectY = cropAspectY;
         return this;
     }
+
+    /**
+     * 设置是否仅拍照获取照片
+     */
+    public SelectionCreator setOnlyCapture(boolean isOnlyCapture) {
+        mSelectionSpec.capture = isOnlyCapture;
+        mSelectionSpec.isOnlyCapture = isOnlyCapture;
+        return this;
+    }
 }

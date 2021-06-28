@@ -165,6 +165,10 @@ public class MatisseActivity extends AppCompatActivity implements
         mAlbumCollection.onCreate(this, this);
         mAlbumCollection.onRestoreInstanceState(savedInstanceState);
         mAlbumCollection.loadAlbums();
+
+        if(mSpec.isOnlyCapture){
+            this.toCapture();
+        }
     }
 
     @Override
@@ -201,6 +205,12 @@ public class MatisseActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_CANCELED && mSpec.isOnlyCapture){
+            finish();
+            return;
+        }
+
         if (resultCode != RESULT_OK)
             return;
 
@@ -468,14 +478,21 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void capture() {
+       this.toCapture();
+    }
+
+    /**
+     * 去拍照获取
+     */
+    private void toCapture(){
         if (mMediaStoreCompat != null) {
             mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
         }
     }
 
     //------------------------------------------2019/1/21 新增 -------------------------------------
-    private ArrayList<SelectedResult> imageResult = new ArrayList<>();
-    private ArrayList<SelectedResult> otherResult = new ArrayList<>();
+    private final ArrayList<SelectedResult> imageResult = new ArrayList<>();
+    private final ArrayList<SelectedResult> otherResult = new ArrayList<>();
 
 
     /**
@@ -493,7 +510,7 @@ public class MatisseActivity extends AppCompatActivity implements
             }
         }
 
-        if (imageResult != null && !imageResult.isEmpty()) {
+        if (!imageResult.isEmpty()) {
             if (mSpec.isCrop) {
                 this.handleCrop(imageResult);
                 return;
