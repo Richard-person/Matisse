@@ -97,7 +97,6 @@ public final class SelectionSpec {
         maxVideoSelectable = 0;
         filters = null;
         capture = false;
-        isOnlyCapture = false;
         captureStrategy = null;
         spanCount = 3;
         gridExpectedSize = 0;
@@ -117,6 +116,8 @@ public final class SelectionSpec {
         isCrop = true;
         cropMaxWidth = 300;
         cropMaxHeight = 300;
+
+        isOnlyCapture = false;
     }
 
     public boolean singleSelectionModeEnabled() {
