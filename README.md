@@ -32,7 +32,7 @@ allprojects {
 	}
 
 dependencies {
-    implementation 'com.github.Richard-person:Matisse:1.0'
+    implementation 'com.github.Richard-person:Matisse:1.1.0'
 }
 ```
 
