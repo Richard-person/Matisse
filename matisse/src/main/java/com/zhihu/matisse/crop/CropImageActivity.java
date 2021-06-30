@@ -29,7 +29,6 @@ import android.opengl.GLES10;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.content.FileProvider;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;

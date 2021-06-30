@@ -15,16 +15,13 @@
   limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
           package="com.zhihu.matisse.sample">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.zhihu.matisse.sample.SampleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
@@ -34,21 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-
-        <!--兼容android7.0目录问题-->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="com.zhihu.matisse.sample.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:name,android:authorities,android:exported,android:grantUriPermissions">
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths_public"
-                tools:replace="android:name,android:resource"/>
+                android:resource="@xml/file_paths_public"></meta-data>
         </provider>
-
     </application>
 
 </manifest>

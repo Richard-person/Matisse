@@ -28,4 +28,5 @@ public class UIUtils {
         }
         return spanCount;
     }
+
 }

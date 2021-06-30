@@ -21,6 +21,21 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/uri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="@+id/uri"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        tools:text="content://media/external/images/media/12345"
+        tools:textColor="@android:color/black" />
+
+    <TextView
         android:id="@+id/path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,22 +44,9 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="2dp"
+        android:text="@+id/uri"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         tools:text="/storage/emulated/0/Pictures/JPEG_20170516_12345.jpg"
         tools:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/tv_file_size"
-        android:layout_margin="7dp"
-        android:textColor="#f22cba"
-        android:text="1KB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:id="@+id/iv_image"
-        android:adjustViewBounds="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

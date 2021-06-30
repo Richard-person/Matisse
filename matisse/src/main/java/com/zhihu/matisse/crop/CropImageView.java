@@ -3,9 +3,10 @@ package com.zhihu.matisse.crop;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 

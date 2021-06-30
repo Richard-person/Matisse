@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 <paths>
-    <paths>
-        <external-path path="" name="cache_file"/>
-    </paths>
+    <external-path
+        name="my_images"
+        path="Pictures"/>
 </paths>

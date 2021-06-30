@@ -19,5 +19,4 @@
     <dimen name="media_grid_spacing">4dp</dimen>
 
     <dimen name="album_item_height">72dp</dimen>
-    <dimen name="crop__bar_height">56dp</dimen>
 </resources>

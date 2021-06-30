@@ -21,14 +21,11 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +34,12 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.crop.Crop;
@@ -58,6 +61,7 @@ import com.zhihu.matisse.internal.ui.widget.IncapableDialog;
 import com.zhihu.matisse.internal.utils.MediaStoreCompat;
 import com.zhihu.matisse.internal.utils.PathUtils;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
+import com.zhihu.matisse.internal.utils.SingleMediaScanner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,13 +82,11 @@ public class MatisseActivity extends AppCompatActivity implements
         AlbumMediaAdapter.CheckStateListener, AlbumMediaAdapter.OnMediaClickListener,
         AlbumMediaAdapter.OnPhotoCapture {
 
-    //预览图片请求码
-    private static final int REQUEST_CODE_PREVIEW = 23;
-    //拍照请求码
-    private static final int REQUEST_CODE_CAPTURE = 24;
-
+    public static final String EXTRA_RESULT_SELECTION = "extra_result_selection";
     public static final String EXTRA_RESULT_SELECTION_PATH = "extra_result_selection_path";
     public static final String EXTRA_RESULT_ORIGINAL_ENABLE = "extra_result_original_enable";
+    private static final int REQUEST_CODE_PREVIEW = 23;
+    private static final int REQUEST_CODE_CAPTURE = 24;
     public static final String CHECK_STATE = "checkState";
     private final AlbumCollection mAlbumCollection = new AlbumCollection();
     private MediaStoreCompat mMediaStoreCompat;
@@ -102,7 +104,6 @@ public class MatisseActivity extends AppCompatActivity implements
     private LinearLayout mOriginalLayout;
     private CheckRadioView mOriginal;
     private boolean mOriginalEnable;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -220,7 +221,6 @@ public class MatisseActivity extends AppCompatActivity implements
             mOriginalEnable = data.getBooleanExtra(BasePreviewActivity.EXTRA_RESULT_ORIGINAL_ENABLE, false);
             int collectionType = resultBundle.getInt(SelectedItemCollection.STATE_COLLECTION_TYPE,
                     SelectedItemCollection.COLLECTION_UNDEFINED);
-
             if (data.getBooleanExtra(BasePreviewActivity.EXTRA_RESULT_APPLY, false)) {
                 ArrayList<SelectedResult> selectedResults = new ArrayList<>();
                 if (selected != null) {
@@ -245,6 +245,21 @@ public class MatisseActivity extends AppCompatActivity implements
                 updateBottomToolbar();
             }
         } else if (requestCode == REQUEST_CODE_CAPTURE) {
+            // Just pass the data back to previous calling Activity.
+            Uri contentUri = mMediaStoreCompat.getCurrentPhotoUri();
+            String path = mMediaStoreCompat.getCurrentPhotoPath();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                MatisseActivity.this.revokeUriPermission(contentUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
+            new SingleMediaScanner(this.getApplicationContext(), path, new SingleMediaScanner.ScanListener() {
+                @Override
+                public void onScanFinish() {
+                    Log.i("SingleMediaScanner", "scan finish!");
+                }
+            });
+
             //确认选中图片
             this.applySelected(new ArrayList<>(
                     Collections.singletonList(this.generatorImageResult(mMediaStoreCompat.getCurrentPhotoPath()))
@@ -267,46 +282,23 @@ public class MatisseActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * 生成选中结果类型
-     *
-     * @param imagePath 图片类型
-     */
-    private SelectedResult generatorImageResult(String imagePath) {
-        if (TextUtils.isEmpty(imagePath)) {
-            return null;
-        }
-
-        File file = new File(imagePath);
-        String fileName = file.getName();
-        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        return new SelectedResult(
-                file.getAbsolutePath()
-                , "image/".concat(suffix)
-                , file.length()
-                , 0
-        );
-    }
-
-    /**
-     * 更新底部工具条状态
-     */
     private void updateBottomToolbar() {
+
         int selectedCount = mSelectedCollection.count();
         if (selectedCount == 0) {
             mButtonPreview.setEnabled(false);
             mButtonApply.setEnabled(false);
-            mButtonApply.setText(getString(R.string.button_sure_default));
+            mButtonApply.setText(getString(R.string.button_apply_default));
         } else if (selectedCount == 1 && mSpec.singleSelectionModeEnabled()) {
             mButtonPreview.setEnabled(true);
-            mButtonApply.setText(R.string.button_sure_default);
+            mButtonApply.setText(R.string.button_apply_default);
             mButtonApply.setEnabled(true);
         } else {
             mButtonPreview.setEnabled(true);
             mButtonApply.setEnabled(true);
-            mButtonApply.setText(getString(R.string.button_sure, selectedCount));
+            mButtonApply.setText(getString(R.string.button_apply, selectedCount));
         }
+
 
         if (mSpec.originalable) {
             mOriginalLayout.setVisibility(View.VISIBLE);
@@ -314,12 +306,11 @@ public class MatisseActivity extends AppCompatActivity implements
         } else {
             mOriginalLayout.setVisibility(View.INVISIBLE);
         }
+
+
     }
 
 
-    /**
-     * 更新原图状态
-     */
     private void updateOriginalState() {
         mOriginal.setChecked(mOriginalEnable);
         if (countOverMaxSize() > 0) {
@@ -478,7 +469,7 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void capture() {
-       this.toCapture();
+        this.toCapture();
     }
 
     /**
@@ -621,4 +612,27 @@ public class MatisseActivity extends AppCompatActivity implements
                 }).launch();
 
     }
+
+    /**
+     * 生成选中结果类型
+     *
+     * @param imagePath 图片类型
+     */
+    private SelectedResult generatorImageResult(String imagePath) {
+        if (TextUtils.isEmpty(imagePath)) {
+            return null;
+        }
+
+        File file = new File(imagePath);
+        String fileName = file.getName();
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        return new SelectedResult(
+                file.getAbsolutePath()
+                , "image/".concat(suffix)
+                , file.length()
+                , 0
+        );
+    }
+
 }
